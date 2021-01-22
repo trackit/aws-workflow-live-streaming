@@ -3,16 +3,16 @@ locals {
 }
 
 resource "aws_route53_record" "live" {
-  count   = var.using_cloudfront ? 1 : 0
+  count = var.using_cloudfront ? 1 : 0
   zone_id = var.route_53_id
   name    = "live.frontendmasters.com"
   type    = "CNAME"
   ttl     = "300"
-  records = [aws_cloudfront_distribution.live[count.index]]
+  records = [aws_cloudfront_distribution.live[0].domain_name]
 }
 
 resource "aws_cloudfront_distribution" "live" {
-  count   = var.using_cloudfront ? 1 : 0
+  count = var.using_cloudfront ? 1 : 0
   enabled = true
   comment = "Endpoint for medialive"
 

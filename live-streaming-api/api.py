@@ -17,7 +17,7 @@ dynamodb_table = os.environ["DYNAMODB_TABLE"]
 input_security_groups = ["893667"]
 medialive_role_arn = os.environ["MEDIALIVE_ROLE_ARN"]
 archive_bucket = os.environ["ARCHIVE_BUCKET"]
-cloudfront_distribution_id = ""#? os.environ["CLOUDFRONT_DISTRIBUTION_ID"]
+cloudfront_distribution_id = os.environ["CLOUDFRONT_DISTRIBUTION_ID"]
 resolutions = [1080, 720, 540, 360]
 
 default_segment_lenth = 300
@@ -261,9 +261,8 @@ def set_stream_cloudfront(event, context):
 
         viewer_endpoint = response["Item"]["viewer_endpoint"]
 
-        #? this is my update
-        print(viewer_endpoint)
-        # set_cloudfront_distribution_origin(viewer_endpoint, stream_id)
+        if cloudfront_distribution_id:
+            set_cloudfront_distribution_origin(viewer_endpoint, stream_id)
 
         # cloudfront_associated
 
@@ -312,8 +311,8 @@ def delete_stream_cloudfront(event, context):
             }
         )
 
-        #? this is my update
-        #delete_cloudfront_distriburion_origin(stream_id)
+        if cloudfront_distribution_id:
+            delete_cloudfront_distriburion_origin(stream_id)
 
         response = table.update_item(
             Key={

@@ -13,7 +13,7 @@ resource "aws_lambda_function" "medialive_create_stream" {
       DYNAMODB_TABLE             = var.dynamodb_table_name,
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name,
-      #? CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.live.id
+      CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : ""
     }
   }
 
@@ -46,7 +46,7 @@ resource "aws_lambda_function" "medialive_start_stream" {
       DYNAMODB_TABLE             = var.dynamodb_table_name,
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
-      #? CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.live.id
+      CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : ""
     }
   }
 
@@ -79,7 +79,7 @@ resource "aws_lambda_function" "medialive_stop_stream" {
       DYNAMODB_TABLE             = var.dynamodb_table_name,
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
-      #? CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.live.id
+      CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : ""
     }
   }
 
@@ -113,7 +113,7 @@ resource "aws_lambda_function" "medialive_get_streams" {
       DYNAMODB_TABLE             = var.dynamodb_table_name,
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
-      #? CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.live.id
+      CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : ""
     }
   }
   lifecycle {
@@ -146,7 +146,7 @@ resource "aws_lambda_function" "medialive_get_stream" {
       DYNAMODB_TABLE             = var.dynamodb_table_name,
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
-      #? CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.live.id
+      CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : ""
     }
   }
   lifecycle {
@@ -179,7 +179,7 @@ resource "aws_lambda_function" "medialive_update_stream" {
       DYNAMODB_TABLE             = var.dynamodb_table_name,
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
-      #? CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.live.id
+      CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : ""
     }
   }
   lifecycle {
@@ -212,7 +212,7 @@ resource "aws_lambda_function" "medialive_delete_stream" {
       DYNAMODB_TABLE             = var.dynamodb_table_name,
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
-      #? CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.live.id
+      CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : ""
       DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
   }
@@ -246,7 +246,7 @@ resource "aws_lambda_function" "medialive_split_stream" {
       DYNAMODB_TABLE             = var.dynamodb_table_name,
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
-      #? CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.live.id
+      CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : ""
     }
   }
   lifecycle {
@@ -279,7 +279,7 @@ resource "aws_lambda_function" "medialive_delete_callback" {
       DYNAMODB_TABLE             = var.dynamodb_table_name,
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
-      #? CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.live.id
+      CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : ""
       DELETE_CALLBACK_NAME       = "Medialive_api_delete_stream_callback"
 
     }
@@ -307,7 +307,7 @@ resource "aws_lambda_function" "medialive_set_stream_cloudfront" {
       DYNAMODB_TABLE             = var.dynamodb_table_name,
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
-      #? CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.live.id
+      CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : ""
     }
   }
   lifecycle {
@@ -340,7 +340,7 @@ resource "aws_lambda_function" "medialive_delete_stream_cloudfront" {
       DYNAMODB_TABLE             = var.dynamodb_table_name,
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
-      #? CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.live.id
+      CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : ""
     }
   }
   lifecycle {
