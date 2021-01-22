@@ -1,0 +1,188 @@
+{
+	"info": {
+		"_postman_id": "879442e5-bc53-441c-bb25-9d62970c74bb",
+		"name": "MJG - Live Stream Management API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET /streams",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/streams",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"streams"
+					]
+				},
+				"description": "Returns list of available streams"
+			},
+			"response": []
+		},
+		{
+			"name": "GET /streams/{id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/streams/{{id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"streams",
+						"{{id}}"
+					]
+				},
+				"description": "Returns details for requested stream"
+			},
+			"response": []
+		},
+		{
+			"name": "POST /streams",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"my_stream\",\n\t\"description\": \"Live Stream with MediaLive\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/streams",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"streams"
+					]
+				},
+				"description": "Creates a stream and returns its details"
+			},
+			"response": []
+		},
+		{
+			"name": "POST /streams/{id}",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/streams/{{id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"streams",
+						"{{id}}"
+					]
+				},
+				"description": "Updates requested stream details"
+			},
+			"response": []
+		},
+		{
+			"name": "POST /streams/{id}/start",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/streams/{{id}}/start",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"streams",
+						"{{id}}",
+						"start"
+					]
+				},
+				"description": "Starts requested stream"
+			},
+			"response": []
+		},
+		{
+			"name": "POST /streams/{id}/stop",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/streams/{{id}}/stop",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"streams",
+						"{{id}}",
+						"stop"
+					]
+				},
+				"description": "Stops requested stream"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /streams/{id}",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/streams/{{id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"streams",
+						"{{id}}"
+					]
+				},
+				"description": "Deletes requested stream and returns its details"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "e31c99d8-4c63-4744-a7e4-00707f2aefe1",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "22d0580a-29e6-4a84-b6e7-f099b43e8b99",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "defb4289-8b19-40f1-acee-ccc8f8a537c4",
+			"key": "baseURL",
+			"value": "https://API",
+			"type": "string"
+		},
+		{
+			"id": "93f15325-c22f-4872-9292-624070bea689",
+			"key": "id",
+			"value": "0",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

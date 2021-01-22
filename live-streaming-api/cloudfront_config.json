@@ -1,0 +1,80 @@
+{
+    "Origin": {
+        "Id": "[Filled by Lambda]",
+        "DomainName": "10380e91fda5e303.mediapackage.us-west-2.amazonaws.com",
+        "OriginPath": "",
+        "CustomHeaders": {
+            "Quantity": 0
+        },
+        "CustomOriginConfig": {
+            "HTTPPort": 80,
+            "HTTPSPort": 443,
+            "OriginProtocolPolicy": "match-viewer",
+            "OriginSslProtocols": {
+                "Quantity": 3,
+                "Items": [
+                    "TLSv1",
+                    "TLSv1.1",
+                    "TLSv1.2"
+                ]
+            },
+            "OriginReadTimeout": 30,
+            "OriginKeepaliveTimeout": 5
+        }
+    },
+    "CacheBehavior": {
+        "PathPattern": "out/v1/4f7dbea888d947f2b04d431d5f905771/*",
+        "TargetOriginId": "EMP-3ae97e9482b0d011",
+        "ForwardedValues": {
+            "QueryString": true,
+            "Cookies": {
+                "Forward": "none"
+            },
+            "Headers": {
+                "Quantity": 3,
+                "Items": [
+                    "Origin",
+                    "Access-Control-Request-Method",
+                    "Access-Control-Request-Headers"
+                ]
+            },
+            "QueryStringCacheKeys": {
+                "Quantity": 3,
+                "Items": [
+                    "end",
+                    "m",
+                    "start"
+                ]
+            }
+        },
+        "TrustedSigners": {
+            "Enabled": false,
+            "Quantity": 0
+        },
+        "ViewerProtocolPolicy": "redirect-to-https",
+        "MinTTL": 0,
+        "AllowedMethods": {
+            "Quantity": 3,
+            "Items": [
+                "HEAD",
+                "GET",
+                "OPTIONS"
+            ],
+            "CachedMethods": {
+                "Quantity": 2,
+                "Items": [
+                    "HEAD",
+                    "GET"
+                ]
+            }
+        },
+        "SmoothStreaming": false,
+        "DefaultTTL": 86400,
+        "MaxTTL": 31536000,
+        "Compress": false,
+        "LambdaFunctionAssociations": {
+            "Quantity": 0
+        },
+        "FieldLevelEncryptionId": ""
+    }
+}
