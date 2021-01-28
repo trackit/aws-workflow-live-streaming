@@ -25,6 +25,7 @@ AWS
 ## Prerequisites
 
 * You must have an **archive S3 bucket**.
+* You must have a MediaLive [input security group](https://docs.aws.amazon.com/medialive/latest/ug/create-input-security-groups.html).
 
 ## Usage
 
@@ -37,6 +38,13 @@ api.py    cloudfront_config.json    medialive_config.json
 ```
 
 **medialive_config.json** is a MediaLive configuration example, you may want to modify **medialive_config.json** file in order to change MediaLive configuration settings. Some values are populated from Lambda function, ( *"[Populated by Lambda function]"* values ).
+
+___
+
+In `api.py line.17`: you must set yours MediaLive input security group ids.
+```py
+input_security_groups = ["123456"]
+```
 
 ___
 #### If you're using AWS Cloudfront
