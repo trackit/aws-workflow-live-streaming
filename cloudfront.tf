@@ -5,7 +5,7 @@ locals {
 resource "aws_route53_record" "live" {
   count = var.using_cloudfront ? 1 : 0
   zone_id = var.route_53_id
-  name    = "live.frontendmasters.com"
+  name    = var.cloudfront_live_domain
   type    = "CNAME"
   ttl     = "300"
   records = [aws_cloudfront_distribution.live[0].domain_name]
@@ -16,7 +16,7 @@ resource "aws_cloudfront_distribution" "live" {
   enabled = true
   comment = "Endpoint for medialive"
 
-  aliases = ["live.frontendmasters.com"]
+  aliases = [var.cloudfront_live_domain]
 
   viewer_certificate {
     acm_certificate_arn = var.acm_certificate

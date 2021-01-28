@@ -35,6 +35,12 @@ variable "acm_certificate" {
   type = string
 }
 
+variable "cloudfront_live_domain" {
+  description = "In case of using AWS Cloudfront, please set Cloudfront live domain"
+  default = "0"
+  type = string
+}
+
 variable "route_53_id" {
   description = "In case of using AWS Cloudfront, please set the Route53 id."
   default = "0"

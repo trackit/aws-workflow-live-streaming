@@ -1,12 +1,161 @@
-# FrontMaster Live Stream
+# AWS Workflow Live Streaming Terraform module
 
-## Infrastructure
+A Terraform module which set a workflow in order to live stream content and archive this content into a S3 bucket.
+This module can also used with AWS Cloudfront.
 
 ![Infrastructure](.documentation/livestream.png)
 
-## Deployment
+[AWS Workflow Video on Demand](https://github.com/trackit/aws-workflow-video-on-demand/)
 
-## Workflow
+## Terraform versions
+
+Terraform 0.12 and newer.
+
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12 |
+| aws | >= 2.11 |
+
+## Providers
+
+AWS
+
+## Prerequisites
+
+* You must have an **archive S3 bucket**.
+
+## Usage
+
+Clone our repository where you plan to use this module.
+
+Before using the module, change directory to **live-streaming-api**.
+```bash
+$ cd live-streaming-api && ls
+api.py    cloudfront_config.json    medialive_config.json
+```
+
+**medialive_config.json** is a MediaLive configuration example, you may want to modify **medialive_config.json** file in order to change MediaLive configuration settings. Some values are populated from Lambda function, ( *"[Populated by Lambda function]"* values ).
+
+___
+#### If you're using AWS Cloudfront
+
+**cloudfront_config.json** is the Cloudfront configuration example, you may want to modify **cloudfront_config.json** file in order to change Cloudfront configuration settings. Some values are populated from Lambda function, ( *"[Filled by Lambda]"* values ).
+
+You can get your Cloudfront configuration using its ID and AWS CLI ( [more details here](https://docs.aws.amazon.com/cli/latest/reference/cloudfront/get-distribution-config.html) ):
+```bash
+$ aws cloudfront get-distribution-config --id EDFDVBD6EXAMPLE
+```
+___
+
+Once your api configuration is done, zip medialive_api's content :
+```bash
+live-streaming-api$ zip -r ../medialive_api.zip .
+```
+
+You're now ready to use this module.
+
+## Usage Example
+
+```hcl
+# not using cloudfront
+module "medialive_api" {
+  source = "./aws-workflow-live-streaming"
+
+  region              = "us-west-2"
+  lambda_zip_path     = "./aws-workflow-live-streaming/medialive_api.zip"
+  archive_bucket_name = "test-workflow-live-archive"
+}
+```
+
+```hcl
+# using cloudfront
+module "medialive_api" {
+  source = "./aws-workflow-live-streaming"
+
+  region                    = "us-west-2"
+  lambda_zip_path           = "./aws-workflow-live-streaming/medialive_api.zip"
+  archive_bucket_name       = "test-workflow-live-archive"
+  using_cloudfront          = true
+  acm_certificate           = "my_cloudfront_acm_certificate"
+  cloudfront_live_domain    = "live.my_cloudfront_domain.com"
+  route_53_id               = "12345678"
+}
+```
+
+What does it do ?
+* Using this module set the AWS Workflow Live Streaming. You're ready to use the API to start live streaming.
+
+### Alternative example using vars.tf
+```hcl
+# vars.tf
+/*
+// module configuration variables
+//  - By changing default values and using module
+*/
+
+variable "region" {
+  description = "AWS region."
+  default     = "us-west-2"
+}
+
+variable "project_base_name" {
+  description = "Project name."
+  default     = "workflow-live"
+}
+
+variable "lambda_zip_path" {
+  description = "Path to lambda zip file."
+  default     = "./medialive_module/api.zip"
+}
+
+variable "dynamodb_table_name" {
+  description = "Db table name for MediaLive API storage."
+  default     = "MedialiveApiStorage"
+}
+
+variable "archive_bucket_name" {
+  description = "Archive bucket to record lives in."
+  default     = "live_archive_bucket"
+}
+
+variable "using_cloudfront" {
+  description = "Boolean to set to true if using AWS Cloudfront."
+  default = false
+  type = bool
+}
+
+variable "acm_certificate" {
+  description = "In case of using AWS Cloudfront, please set ACM certificate."
+  default = "0"
+  type = string
+}
+
+variable "cloudfront_live_domain" {
+  description = "In case of using AWS Cloudfront, please set Cloudfront live domain"
+  default = "0"
+  type = string
+}
+
+variable "route_53_id" {
+  description = "In case of using AWS Cloudfront, please set the Route53 id."
+  default = "0"
+  type = string
+}
+
+```
+
+```hcl
+# in file using module
+module "medialive_api" {
+  source = "./aws-workflow-live-streaming"
+}
+```
+____
+# Get Started with API
+
+*A postman collection is provided __postman_collection.json__.*
 
 ### 1. Create a stream
 
@@ -18,9 +167,9 @@ This endpoint will return all the information for this new stream, such as the s
 
 With a `POST` request to `/streams/{stream_id}/start`, the API will start the MediaLive Channel and you will be able to send data with your streaming software.
 
-### 3. Select the stream for the live Cloudfront distributio
+### 3. Select the stream for the live Cloudfront distribution
 
-With a `POST` request to `/streams/{stream_id}/live`, the API will associate the stream with the "live" Cloudfront distribution, setting the domain `live.frontendmasters.com` to the mediapackage url for this stream. 
+With a `POST` request to `/streams/{stream_id}/live`, the API will associate the stream with the "live" Cloudfront distribution, setting the Cloudfront live domain to the mediapackage url for this stream. 
 
 ### 4. Stream your content
 
@@ -40,18 +189,13 @@ With a `POST` request to `/streams/{stream_id}/stop`, the API will stop the Medi
 
 ### 6. Split the record of the stream
 
-You can send information on how to split the record of a stream with a `POST` request to `/streams/{stream_id}/split`. The API will generate for each requested section a dedicated M3U8 file which will then automatically be transcoded to a mp4 file.
-
-The output bucket for this file is defined in the variable `fem_workshop_output_bucket` in the main module. It is currently `fem-workshops-out`.
-The path mirrors the path of the `.ts` files that are saved by Medialive.
-
-The output files will be named `index_{pos_in_list}.mp4`. 
+You can send information on how to split the record of a stream with a `POST` request to `/streams/{stream_id}/split`. The API will generate for each requested section a dedicated M3U8 file. You could probably use the [aws-workflow-video-on-demand](https://github.com/trackit/aws-workflow-video-on-demand/) module in order to convert automatically files generated to MP4 file.
 
 You will need to pass a list of objects containing the start and finish timestamps of each section. The timestamps are in seconds.
 
 You will also need to pass the `session_id` parameter for the stream you want to select (since a channel can be reused for multiple streams).
 
-The `session_id` is the key of the `archives_path` map corresponding to the path you want to use. 
+The `session_id` is the key of the `archives_path` map corresponding to the path you want to use.
 
 Example of the body:
 ````json
@@ -74,48 +218,6 @@ Example of the body:
 }
 ````
 ---
-
-## Note the DynamoDB scheme was updated for the following routes, so you'll have to create new streams to use them
-
----
-
-### 7. Stream a Chime Meeting to Medialive
-
-To start the streaming of Chime meeting to media live, you need to have the following things : 
-
-- A started Medialive channel and its `{stream_id}`
-- A chime meeting and its url `{chime_url}`. An example url is `https://j7zzx3mcs9.execute-api.us-east-1.amazonaws.com/Prod/v2?m=mjg-test-connector-meeting`
-
-You will then need to make a `POST` request to the `/streams/{stream_id}/chime_start` with the following body : 
-
-```json
-{
-    "chime_url": "{chime_url}&broadcast=true"
-}
-```
-
-Note that you have to append the `&broadcast=true` string to the Chime url.
-
-It will then spin up a new instance in the ECS cluster, and start a task for streaming. Note that it can take up to ten minutes to start the streaming.
-
-Note also that currently you can't have more than one connector running at a time.
-
-### 8. Stream a Chime Meeting to IVS 
-
-The route is identical to the one to start the chime connector to medialive, except its endpoint is `/streams/{stream_id}/ivs_start`.
-
-It also returns two new arguments in the body response : 
-
-- `ivs_viewer_endpoint` : Url for the m3u8 manifest file of the IVS stream.
-- `rtmp_ivs` : RTMP endpoint for the IVS service, in case you want to directly send video to IVS.
-
-### 9. Stop streaming the Chime Meeting to Medialive
-
-Send a `POST` request to `/streams/{stream_id}/chime_stop` with `{stream_id}` as the Medialive channel id.
-
-### 10. Stop streaming the Chime Meeting to IVS
-
-Send the same request as for Medialive, but on the `/streams/{tream_id}/ivs_stop` endpoint.
 
 ## API Documentation
 
@@ -341,7 +443,7 @@ Response:
 
 ### POST /streams/{id}/live
 
-Associates stream with `live.frontendmasters.com` Cloudfront distribution.
+Associates stream with Cloudfront distribution.
 
 You can associate an arbitrary number of streams with the live Cloudfront distribution
 
@@ -357,7 +459,7 @@ No response
 
 ### DELETE /streams/{id}/live
 
-Dissociates the stream with `live.frontendmasters.com` Cloudfront distribution.
+Dissociates the stream with Cloudfront distribution.
 
 Note that when calling DELETE on `/streams/{id}` it will automatically dissociate the endpoint from the live endpoint. 
 
@@ -374,84 +476,6 @@ No response
 ### POST /streams/{id}/stop
 
 Stops requested stream
-
-Body:
-````json
-No body required
-````
-
-Response:
-
-````json
-{
-    "name": "my_stream",
-    "description": "This is a stream",
-    "id": "1234567890ABCDEF",
-    "rtmp1": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-    "rtmp2": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-    "viewer_endpoint": "http://url_for_output",
-    "archives_path": {
-        "1234567890ABCDEF": "s3://bucket/path/to/archive"
-    },
-    "last_update": "1234567890",
-    "last_started": "1234567890",
-    "last_stopped": "1234567890",
-    "started": true,
-    "current_session_id": "1234567890ABCDEF",
-    "live_channel_id": "1234567890ABCDEF",
-    "live_input_id": "1234567890ABCDEF",
-    "package_endpoint_id": "1234567890ABCDEF",
-    "package_channel_id": "1234567890ABCDEF"
-}
-````
-
-### POST /streams/{id}/chime_start
-
-Starts the Chime meeting connector
-
-Body:
-````json
-{
-    "chime_url": "{chime_url}&broadcast=true"
-}
-````
-
-With `chime_url` as the chime meeting url. Note that you need to append the `&broadcast=true` to the url, and you need to have the `/v2/` version of the frontend.
-
-An working example url would be : 
-
-```
-https://j7zzx3mcs9.execute-api.us-east-1.amazonaws.com/Prod/v2?m=mjg-test-connector-meeting&broadcast=true
-```
-
-Response:
-
-````json
-{
-    "name": "my_stream",
-    "description": "This is a stream",
-    "id": "1234567890ABCDEF",
-    "rtmp1": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-    "rtmp2": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-    "viewer_endpoint": "http://url_for_output",
-    "archives_path": {
-        "1234567890ABCDEF": "s3://bucket/path/to/archive"
-    },
-    "last_update": "1234567890",
-    "last_started": "1234567890",
-    "last_stopped": "1234567890",
-    "started": true,
-    "current_session_id": "1234567890ABCDEF",
-    "live_channel_id": "1234567890ABCDEF",
-    "live_input_id": "1234567890ABCDEF",
-    "package_endpoint_id": "1234567890ABCDEF",
-    "package_channel_id": "1234567890ABCDEF"
-}
-````
-
-### POST /streams/{id}/chime_stop
-
-Stops the Chime sdk connector tasks, and removes the instance from the ecs cluster.
 
 Body:
 ````json

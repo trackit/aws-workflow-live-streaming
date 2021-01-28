@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "879442e5-bc53-441c-bb25-9d62970c74bb",
-		"name": "MJG - Live Stream Management API",
+		"name": "Trackit - Live Stream Management API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [

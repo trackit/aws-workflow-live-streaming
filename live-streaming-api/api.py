@@ -18,6 +18,7 @@ input_security_groups = ["893667"]
 medialive_role_arn = os.environ["MEDIALIVE_ROLE_ARN"]
 archive_bucket = os.environ["ARCHIVE_BUCKET"]
 cloudfront_distribution_id = os.environ["CLOUDFRONT_DISTRIBUTION_ID"]
+cloudfront_live_domain = os.environ["CLOUDFRONT_LIVE_DOMAIN"]
 resolutions = [1080, 720, 540, 360]
 
 default_segment_lenth = 300
@@ -453,7 +454,7 @@ def create_stream(event, context):
         domain_name = re.search(r"https:\/\/(.*?)\/.*",
                                 viewer_endpoint).group(1)
         cloudfront_domain = viewer_endpoint.replace(
-            domain_name, "live.frontendmasters.com")
+            domain_name, cloudfront_live_domain)
 
         metadata = json.loads(event['body'])
         metadata['id'] = stream_id
