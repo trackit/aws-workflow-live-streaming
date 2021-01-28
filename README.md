@@ -1,7 +1,7 @@
 # AWS Workflow Live Streaming Terraform module
 
 A Terraform module which set a workflow in order to live stream content and archive this content into a S3 bucket.
-This module can also used with AWS Cloudfront.
+This module can also be used with AWS Cloudfront. An AWS Cloudfront distribution can handle multiple livestreams simultaneously.
 
 ![Infrastructure](.documentation/livestream.png)
 
@@ -169,7 +169,9 @@ With a `POST` request to `/streams/{stream_id}/start`, the API will start the Me
 
 ### 3. Select the stream for the live Cloudfront distribution
 
-With a `POST` request to `/streams/{stream_id}/live`, the API will associate the stream with the "live" Cloudfront distribution, setting the Cloudfront live domain to the mediapackage url for this stream. 
+With a `POST` request to `/streams/{stream_id}/live`, the API will associate the stream with the "live" Cloudfront distribution, setting the Cloudfront live domain to the mediapackage url for this stream.
+
+Note that a Cloudfront distribution can handle multiple livestream simultaneously.
 
 ### 4. Stream your content
 
@@ -183,6 +185,8 @@ Server: `rtmp://IP_ADDRESS:PORT/`
 
 Stream Key: `STREAMING_KEY`
 
+**Check the livestream is on:** go to link in `viewer_endpoint` or `viewer_endpoint_cloudfront` *( if using Cloudfront )* value from stream details and use index.m3u8 with VLC for example.
+
 ### 5. Stop the stream
 
 With a `POST` request to `/streams/{stream_id}/stop`, the API will stop the MediaLive Channel.
@@ -190,6 +194,10 @@ With a `POST` request to `/streams/{stream_id}/stop`, the API will stop the Medi
 ### 6. Split the record of the stream
 
 You can send information on how to split the record of a stream with a `POST` request to `/streams/{stream_id}/split`. The API will generate for each requested section a dedicated M3U8 file. You could probably use the [aws-workflow-video-on-demand](https://github.com/trackit/aws-workflow-video-on-demand/) module in order to convert automatically files generated to MP4 file.
+
+**Usage exemple:** I'm livestreaming for hours, but I'm gonna split the stream record in order to have some stream moments to quickly publish them.
+
+Split API route can be used during the livestreaming and when it's stopped.
 
 You will need to pass a list of objects containing the start and finish timestamps of each section. The timestamps are in seconds.
 
@@ -217,6 +225,13 @@ Example of the body:
     "session_id": "1234567890ABCDEF"
 }
 ````
+
+### 7. Delete ressources
+
+**WARNING:** Be sure that you stopped the stream and that MediaLive channel is stopped.
+
+With a `DELETE` request to `/streams/{stream_id}`, the API will delete the MediaLive Channel and MediaPackage one.
+
 ---
 
 ## API Documentation
