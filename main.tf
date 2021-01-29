@@ -32,7 +32,7 @@ resource "aws_dynamodb_table" "medialive-api-storage" {
 
 
 resource "aws_api_gateway_rest_api" "speke_server_api" {
-  name = "MedialiveApi"
+  name = "${var.project_base_name}-medialive-api"
 }
 
 resource "aws_api_gateway_deployment" "speke_server_api_deployment" {
