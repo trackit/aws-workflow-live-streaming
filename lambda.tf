@@ -14,22 +14,18 @@ resource "aws_lambda_function" "medialive_create_stream" {
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name,
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
-      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain
+      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
+      DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
   }
-
-  # lifecycle {
-  #   ignore_changes = [
-  #     source_code_hash
-  #   ]
-  # }
 }
 
-resource "aws_lambda_permission" "speke_invoke_speke_server_permission_create_stream" {
+resource "aws_lambda_permission" "invoke_permission_create_stream" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_create_stream.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.speke_server_api.execution_arn}/*"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*"
 }
 
 resource "aws_lambda_function" "medialive_start_stream" {
@@ -48,22 +44,18 @@ resource "aws_lambda_function" "medialive_start_stream" {
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
-      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain
+      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
+      DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
-  }
-
-  lifecycle {
-    ignore_changes = [
-      source_code_hash
-    ]
   }
 }
 
-resource "aws_lambda_permission" "speke_invoke_speke_server_permission_start_stream" {
+resource "aws_lambda_permission" "invoke_permission_start_stream" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_start_stream.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.speke_server_api.execution_arn}/*"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*"
 }
 
 resource "aws_lambda_function" "medialive_stop_stream" {
@@ -82,23 +74,18 @@ resource "aws_lambda_function" "medialive_stop_stream" {
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
-      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain
+      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
+      DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
   }
-
-  lifecycle {
-    ignore_changes = [
-      source_code_hash
-    ]
-  }
-
 }
 
-resource "aws_lambda_permission" "speke_invoke_speke_server_permission_stop_stream" {
+resource "aws_lambda_permission" "invoke_permission_stop_stream" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_stop_stream.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.speke_server_api.execution_arn}/*"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*"
 }
 
 resource "aws_lambda_function" "medialive_get_streams" {
@@ -117,22 +104,18 @@ resource "aws_lambda_function" "medialive_get_streams" {
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
-      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain
+      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
+      DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
   }
-  lifecycle {
-    ignore_changes = [
-      source_code_hash
-    ]
-  }
-
 }
 
-resource "aws_lambda_permission" "speke_invoke_speke_server_permission_get_streams" {
+resource "aws_lambda_permission" "invoke_permission_get_streams" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_get_streams.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.speke_server_api.execution_arn}/*"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*"
 }
 
 resource "aws_lambda_function" "medialive_get_stream" {
@@ -151,22 +134,18 @@ resource "aws_lambda_function" "medialive_get_stream" {
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
-      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain
+      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
+      DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
   }
-  lifecycle {
-    ignore_changes = [
-      source_code_hash
-    ]
-  }
-
 }
 
-resource "aws_lambda_permission" "speke_invoke_speke_server_permission_get_stream" {
+resource "aws_lambda_permission" "invoke_permission_get_stream" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_get_stream.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.speke_server_api.execution_arn}/*"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*"
 }
 
 resource "aws_lambda_function" "medialive_update_stream" {
@@ -185,22 +164,18 @@ resource "aws_lambda_function" "medialive_update_stream" {
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
-      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain
+      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
+      DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
   }
-  lifecycle {
-    ignore_changes = [
-      source_code_hash
-    ]
-  }
-
 }
 
-resource "aws_lambda_permission" "speke_invoke_speke_server_permission_update_stream" {
+resource "aws_lambda_permission" "invoke_permission_update_stream" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_update_stream.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.speke_server_api.execution_arn}/*"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*"
 }
 
 resource "aws_lambda_function" "medialive_delete_stream" {
@@ -220,22 +195,17 @@ resource "aws_lambda_function" "medialive_delete_stream" {
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
       DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
   }
-  lifecycle {
-    ignore_changes = [
-      source_code_hash
-    ]
-  }
-
 }
 
-resource "aws_lambda_permission" "speke_invoke_speke_server_permission_delete_stream" {
+resource "aws_lambda_permission" "invoke_permission_delete_stream" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_delete_stream.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.speke_server_api.execution_arn}/*"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*"
 }
 
 resource "aws_lambda_function" "medialive_split_stream" {
@@ -254,22 +224,18 @@ resource "aws_lambda_function" "medialive_split_stream" {
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
-      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain
+      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
+      DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
   }
-  lifecycle {
-    ignore_changes = [
-      source_code_hash
-    ]
-  }
-
 }
 
-resource "aws_lambda_permission" "speke_invoke_speke_server_permission_split_stream" {
+resource "aws_lambda_permission" "invoke_permission_split_stream" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_split_stream.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.speke_server_api.execution_arn}/*"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*"
 }
 
 resource "aws_lambda_function" "medialive_delete_callback" {
@@ -289,15 +255,9 @@ resource "aws_lambda_function" "medialive_delete_callback" {
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
-      DELETE_CALLBACK_NAME       = "Medialive_api_delete_stream_callback"
+      DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback"
     }
   }
-  lifecycle {
-    ignore_changes = [
-      source_code_hash
-    ]
-  }
-
 }
 
 resource "aws_lambda_function" "medialive_set_stream_cloudfront" {
@@ -316,22 +276,18 @@ resource "aws_lambda_function" "medialive_set_stream_cloudfront" {
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
-      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain
+      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
+      DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
   }
-  lifecycle {
-    ignore_changes = [
-      source_code_hash
-    ]
-  }
-
 }
 
-resource "aws_lambda_permission" "speke_invoke_speke_server_permission_set_stream_cloudfront" {
+resource "aws_lambda_permission" "invoke_permission_set_stream_cloudfront" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_set_stream_cloudfront.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.speke_server_api.execution_arn}/*"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*"
 }
 
 resource "aws_lambda_function" "medialive_delete_stream_cloudfront" {
@@ -350,19 +306,16 @@ resource "aws_lambda_function" "medialive_delete_stream_cloudfront" {
       MEDIALIVE_ROLE_ARN         = aws_iam_role.medialive_job.arn,
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
-      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain
+      CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
+      DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
-  }
-  lifecycle {
-    ignore_changes = [
-      source_code_hash
-    ]
   }
 }
 
-resource "aws_lambda_permission" "speke_invoke_speke_server_permission_deltee_stream_cloudfront" {
+resource "aws_lambda_permission" "invoke_permission_delete_stream_cloudfront" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_delete_stream_cloudfront.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.speke_server_api.execution_arn}/*"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*"
 }

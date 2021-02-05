@@ -31,29 +31,29 @@ resource "aws_dynamodb_table" "medialive-api-storage" {
 }
 
 
-resource "aws_api_gateway_rest_api" "speke_server_api" {
+resource "aws_api_gateway_rest_api" "api" {
   name = "${var.project_base_name}-medialive-api"
 }
 
-resource "aws_api_gateway_deployment" "speke_server_api_deployment" {
+resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
-    aws_api_gateway_integration.speke_server_api_integration_post_streams,
-    aws_api_gateway_integration.speke_server_api_integration_get_streams,
-    aws_api_gateway_integration.speke_server_api_integration_post_streams_start,
-    aws_api_gateway_integration.speke_server_api_integration_post_streams_stop,
-    aws_api_gateway_integration.speke_server_api_integration_post_stream_split,
-    aws_api_gateway_integration.speke_server_api_integration_post_stream_live,
-    aws_api_gateway_integration.speke_server_api_integration_delete_stream_live,
-    aws_api_gateway_integration.speke_server_api_integration_get_stream_id,
-    aws_api_gateway_integration.speke_server_api_integration_post_stream_id,
-    aws_api_gateway_integration.speke_server_api_integration_delete_stream_id
+    aws_api_gateway_integration.api_integration_post_streams,
+    aws_api_gateway_integration.api_integration_get_streams,
+    aws_api_gateway_integration.api_integration_post_streams_start,
+    aws_api_gateway_integration.api_integration_post_streams_stop,
+    aws_api_gateway_integration.api_integration_post_stream_split,
+    aws_api_gateway_integration.api_integration_post_stream_live,
+    aws_api_gateway_integration.api_integration_delete_stream_live,
+    aws_api_gateway_integration.api_integration_get_stream_id,
+    aws_api_gateway_integration.api_integration_post_stream_id,
+    aws_api_gateway_integration.api_integration_delete_stream_id
   ]
 
-  rest_api_id = aws_api_gateway_rest_api.speke_server_api.id
+  rest_api_id = aws_api_gateway_rest_api.api.id
   stage_name  = "dev"
   description = "Default stage deployment for MediaLive API"
 }
 
 output "apigateway_url" {
-  value = aws_api_gateway_deployment.speke_server_api_deployment.invoke_url
+  value = aws_api_gateway_deployment.api_deployment.invoke_url
 }
