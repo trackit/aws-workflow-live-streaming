@@ -1,7 +1,9 @@
 # AWS Workflow Live Streaming Terraform module
 
-A Terraform module which set a workflow in order to live stream content and archive this content into a S3 bucket.
-This module can also be used with AWS Cloudfront. An AWS Cloudfront distribution can handle multiple livestreams simultaneously.
+AWS MediaLive is an AWS serverless service used to create livestreaming videos without the complexity of building and operating broadcast-grade video processing infrastructure.
+This terraform module is used to manage mutliple livestreams easily by providing an API.
+
+This module can be used with AWS CloudFront.
 
 ![Infrastructure](.documentation/livestream.png)
 
@@ -25,7 +27,8 @@ AWS
 ## Prerequisites
 
 * You must have an **archive S3 bucket**.
-* You must have a MediaLive [input security group](https://docs.aws.amazon.com/medialive/latest/ug/create-input-security-groups.html).
+* You must have a MediaLive [input security group](https://docs.aws.amazon.com/medialive/latest/ug/create-input-security-groups.html) (actually, input security group cannot be managed by terraform).
+* If using AWS CloudFront, you must have an acm certificate and also a AWS route53.
 
 ## Usage
 
@@ -38,6 +41,20 @@ api.py    cloudfront_config.json    medialive_config.json
 ```
 
 **medialive_config.json** is a MediaLive configuration example, you may want to modify **medialive_config.json** file in order to change MediaLive configuration settings. Some values are populated from Lambda function, ( *"[Populated by Lambda function]"* values ).
+
+#### Default config :
+**Live streaming :**
+| Resolution | Bitrate (bits/s) |
+|:------------:|:---------:|
+| 640x360 | 64000 |
+| 960x540 | 96000 |
+| 1280x720 | 128000 |
+| 1920x1080 | 128000 |
+
+**Archive records :**
+| Resolution | Bitrate (bits/s) |
+|:------------:|:---------:|
+| 1920x1080 | 96000 |
 
 ___
 
@@ -65,6 +82,8 @@ live-streaming-api$ zip -r ../medialive_api.zip .
 You're now ready to use this module.
 
 ## Usage Example
+
+**Make sure that the archive bucket used is in the same AWS Region as the terraform module region that you defined.**
 
 ```hcl
 # not using cloudfront
@@ -100,7 +119,7 @@ What does it do ?
 # vars.tf
 /*
 // module configuration variables
-//  - By changing default values and using module
+//  - By overriding default values provided by the module
 */
 
 variable "region" {
@@ -163,6 +182,8 @@ module "medialive_api" {
 ____
 # Get Started with API
 
+Once the terraform module is applied, you should use the provided API to manage livestreams. There is no authorization set.
+
 *A postman collection is provided __postman_collection.json__.*
 
 ### 1. Create a stream
@@ -183,7 +204,7 @@ Note that a Cloudfront distribution can handle multiple livestream simultaneousl
 
 ### 4. Stream your content
 
-The `rtmp1` value from stream details contains two information needed to configure your streaming software: `rtmp://IP_ADDRESS:PORT/STREAMING_KEY`
+The `rtmp1` value from stream details contains two information needed to configure your streaming software: `rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY`
 
 Example with OBS:
 
@@ -212,6 +233,9 @@ You will need to pass a list of objects containing the start and finish timestam
 You will also need to pass the `session_id` parameter for the stream you want to select (since a channel can be reused for multiple streams).
 
 The `session_id` is the key of the `archives_path` map corresponding to the path you want to use.
+
+*Example of stream return with route GET /streams :*
+![Example Session-id](./.documentation/session-id.png)
 
 Example of the body:
 ````json
@@ -244,6 +268,8 @@ With a `DELETE` request to `/streams/{stream_id}`, the API will delete the Media
 
 ## API Documentation
 
+Make sure to set header ```"content-type": "application/json"``` for **POST** requests.
+
 ### GET /streams
 
 Returns list of available streams
@@ -261,8 +287,8 @@ Response:
         "name": "stream_name",
         "description": "Stream description",
         "id": "1234567890ABCDEF",
-        "rtmp1": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-        "rtmp2": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
+        "rtmp1": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
+        "rtmp2": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
         "viewer_endpoint": "http://url_for_output",
         "archives_path": {
             "1234567890ABCDEF": "s3://bucket/path/to/archive"
@@ -281,8 +307,8 @@ Response:
         "name": "another_stream_name",
         "description": "Stream description again",
         "id": "1234567890ABCDEF",
-        "rtmp1": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-        "rtmp2": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
+        "rtmp1": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
+        "rtmp2": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
         "viewer_endpoint": "http://url_for_output",
         "archives_path": {},
         "last_update": "1234567890",
@@ -314,8 +340,8 @@ Response:
     "name": "stream_name",
     "description": "Stream description",
     "id": "1234567890ABCDEF",
-    "rtmp1": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-    "rtmp2": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
+    "rtmp1": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
+    "rtmp2": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
     "viewer_endpoint": "http://url_for_output",
     "archives_path": {
         "1234567890ABCDEF": "s3://bucket/path/to/archive"
@@ -345,7 +371,7 @@ Body:
 }
 ````
 
-`segment_length` is an optional argument which allow you to control the size of the segment files saved to S3, in seconds. If no value is provided, the default of 300 seconds is used.
+`segment_length` is an optional argument which allow you to control the length of the segment files saved to S3, in seconds. If no value is provided, the default of 300 seconds is used.
 
 Response:
 
@@ -354,8 +380,8 @@ Response:
     "name": "my_stream",
     "description": "This is a stream",
     "id": "1234567890ABCDEF",
-    "rtmp1": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-    "rtmp2": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
+    "rtmp1": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
+    "rtmp2": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
     "viewer_endpoint": "http://url_for_output",
     "archives_path": {},
     "last_update": "1234567890",
@@ -380,8 +406,8 @@ Body:
     "name": "my_stream",
     "description": "This is a stream with MediaLive",
     "id": "1234567890ABCDEF",
-    "rtmp1": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-    "rtmp2": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
+    "rtmp1": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
+    "rtmp2": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
     "viewer_endpoint": "http://url_for_output",
     "archives_path": {},
     "last_update": "1234567890",
@@ -403,8 +429,8 @@ Response:
     "name": "my_stream",
     "description": "This is a stream with MediaLive",
     "id": "1234567890ABCDEF",
-    "rtmp1": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-    "rtmp2": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
+    "rtmp1": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
+    "rtmp2": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
     "viewer_endpoint": "http://url_for_output",
     "archives_path": {},
     "last_update": "1234567890",
@@ -446,8 +472,8 @@ Response:
     "name": "my_stream",
     "description": "This is a stream",
     "id": "1234567890ABCDEF",
-    "rtmp1": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-    "rtmp2": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
+    "rtmp1": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
+    "rtmp2": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
     "viewer_endpoint": "http://url_for_output",
     "archives_path": {
         "1234567890ABCDEF": "s3://bucket/path/to/archive"
@@ -512,8 +538,8 @@ Response:
     "name": "my_stream",
     "description": "This is a stream",
     "id": "1234567890ABCDEF",
-    "rtmp1": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-    "rtmp2": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
+    "rtmp1": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
+    "rtmp2": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
     "viewer_endpoint": "http://url_for_output",
     "archives_path": {
         "1234567890ABCDEF": "s3://bucket/path/to/archive"
@@ -581,8 +607,8 @@ Response:
     "name": "my_stream",
     "description": "This is a stream",
     "id": "1234567890ABCDEF",
-    "rtmp1": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
-    "rtmp2": "rtmp://IP_ADDRESS:PORT/STREAMING_KEY",
+    "rtmp1": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
+    "rtmp2": "rtmp://IP_ADDRESS:PORT/app/STREAMING_KEY",
     "viewer_endpoint": "http://url_for_output",
     "archives_path": {
         "1234567890ABCDEF": "s3://bucket/path/to/archive"
