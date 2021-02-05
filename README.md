@@ -234,7 +234,7 @@ You will also need to pass the `session_id` parameter for the stream you want to
 
 The `session_id` is the key of the `archives_path` map corresponding to the path you want to use.
 
-*Example of stream return with route GET /streams :*
+*Example of stream returned with route GET /streams :*
 ![Example Session-id](./.documentation/session-id.png)
 
 Example of the body:
