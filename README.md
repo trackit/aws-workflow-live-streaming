@@ -57,13 +57,6 @@ api.py    cloudfront_config.json    medialive_config.json
 | 1920x1080 | 7000000 |
 
 ___
-
-In `api.py line.17`: you must set yours MediaLive input security group ids.
-```py
-input_security_groups = ["123456"]
-```
-
-___
 #### If you're using AWS Cloudfront
 
 **cloudfront_config.json** is the Cloudfront configuration example, you may want to modify **cloudfront_config.json** file in order to change Cloudfront configuration settings. Some values are populated from Lambda function, ( *"[Filled by Lambda]"* values ).
@@ -104,8 +97,9 @@ module "medialive_api" {
   region                    = "us-west-2"
   lambda_zip_path           = "./aws-workflow-live-streaming/medialive_api.zip"
   archive_bucket_name       = "test-workflow-live-archive"
+  input_security_group      = "123456"
   using_cloudfront          = true
-  acm_certificate           = "my_cloudfront_acm_certificate"
+  acm_certificate           = "arn:aws:acm:us-east-1:123456789123:certificate/12abc3de8-7154-407b-a5a6-fd86525f7784"
   cloudfront_live_domain    = "live.my_cloudfront_domain.com"
   route_53_id               = "12345678"
 }
@@ -145,6 +139,11 @@ variable "dynamodb_table_name" {
 variable "archive_bucket_name" {
   description = "Archive bucket to record lives in."
   default     = "live_archive_bucket"
+}
+
+variable "input_security_group" {
+  description = "AWS MediaLive input security group."
+  type = string
 }
 
 variable "using_cloudfront" {
