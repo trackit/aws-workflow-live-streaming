@@ -46,15 +46,15 @@ api.py    cloudfront_config.json    medialive_config.json
 **Live streaming :**
 | Resolution | Bitrate (bits/s) |
 |:------------:|:---------:|
-| 640x360 | 64000 |
-| 960x540 | 96000 |
-| 1280x720 | 128000 |
-| 1920x1080 | 128000 |
+| 640x360 | 800000 |
+| 960x540 | 2200000 |
+| 1280x720 | 4700000 |
+| 1920x1080 | 8000000 |
 
 **Archive records :**
 | Resolution | Bitrate (bits/s) |
 |:------------:|:---------:|
-| 1920x1080 | 96000 |
+| 1920x1080 | 7000000 |
 
 ___
 
