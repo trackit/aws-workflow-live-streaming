@@ -23,6 +23,11 @@ variable "archive_bucket_name" {
   default     = "live_archive_bucket"
 }
 
+variable "input_security_group" {
+  description = "AWS MediaLive input security group."
+  type = string
+}
+
 variable "using_cloudfront" {
   description = "Boolean to set to true if using AWS Cloudfront."
   default = false

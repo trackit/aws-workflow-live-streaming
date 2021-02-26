@@ -15,6 +15,7 @@ resource "aws_lambda_function" "medialive_create_stream" {
       ARCHIVE_BUCKET             = var.archive_bucket_name,
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      INPUT_SECURITY_GROUP       = var.input_security_group,
       DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
       DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
@@ -45,6 +46,7 @@ resource "aws_lambda_function" "medialive_start_stream" {
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      INPUT_SECURITY_GROUP       = var.input_security_group,
       DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
       DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
@@ -75,6 +77,7 @@ resource "aws_lambda_function" "medialive_stop_stream" {
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      INPUT_SECURITY_GROUP       = var.input_security_group,
       DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
       DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
@@ -105,6 +108,7 @@ resource "aws_lambda_function" "medialive_get_streams" {
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      INPUT_SECURITY_GROUP       = var.input_security_group,
       DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
       DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
@@ -135,6 +139,7 @@ resource "aws_lambda_function" "medialive_get_stream" {
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      INPUT_SECURITY_GROUP       = var.input_security_group,
       DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
       DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
@@ -165,6 +170,7 @@ resource "aws_lambda_function" "medialive_update_stream" {
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      INPUT_SECURITY_GROUP       = var.input_security_group,
       DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
       DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
@@ -195,6 +201,7 @@ resource "aws_lambda_function" "medialive_delete_stream" {
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      INPUT_SECURITY_GROUP       = var.input_security_group,
       DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
       DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
@@ -225,6 +232,7 @@ resource "aws_lambda_function" "medialive_split_stream" {
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      INPUT_SECURITY_GROUP       = var.input_security_group,
       DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
       DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
@@ -255,6 +263,7 @@ resource "aws_lambda_function" "medialive_delete_callback" {
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      INPUT_SECURITY_GROUP       = var.input_security_group,
       DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback"
     }
   }
@@ -277,6 +286,7 @@ resource "aws_lambda_function" "medialive_set_stream_cloudfront" {
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      INPUT_SECURITY_GROUP       = var.input_security_group,
       DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
       DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }
@@ -307,6 +317,7 @@ resource "aws_lambda_function" "medialive_delete_stream_cloudfront" {
       ARCHIVE_BUCKET             = var.archive_bucket_name
       CLOUDFRONT_DISTRIBUTION_ID = var.using_cloudfront ? aws_cloudfront_distribution.live[0].id : "",
       CLOUDFRONT_LIVE_DOMAIN     = var.cloudfront_live_domain,
+      INPUT_SECURITY_GROUP       = var.input_security_group,
       DELETE_CALLBACK_NAME       = "${var.project_base_name}-medialive_api_delete_stream_callback",
       DELETE_CALLBACK_ARN        = aws_lambda_function.medialive_delete_callback.arn
     }

@@ -53,31 +53,6 @@ resource "aws_cloudfront_distribution" "live" {
       }
 
       headers = [
-        "Origin"
-      ]
-
-      query_string = true
-      query_string_cache_keys = [
-        "end",
-        "m",
-        "start"
-      ]
-    }
-  }
-
-  ordered_cache_behavior {
-    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "TempORIGIN"
-    viewer_protocol_policy = "redirect-to-https"
-    path_pattern           = "*"
-
-    forwarded_values {
-      cookies {
-        forward = "none"
-      }
-
-      headers = [
         "Access-Control-Request-Method",
         "Access-Control-Request-Headers",
         "Origin"
@@ -91,6 +66,7 @@ resource "aws_cloudfront_distribution" "live" {
       ]
     }
   }
+
   dynamic "custom_error_response" {
     for_each = local.error_pages
 

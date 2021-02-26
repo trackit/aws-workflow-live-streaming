@@ -109,6 +109,26 @@
 			"response": []
 		},
 		{
+			"name": "POST /streams/{id}/live",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/streams/{{id}}/live",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"streams",
+						"{{id}}",
+						"live"
+					]
+				},
+				"description": "Set live cloudfront distribution"
+			},
+			"response": []
+		},
+		{
 			"name": "POST /streams/{id}/stop",
 			"request": {
 				"method": "POST",

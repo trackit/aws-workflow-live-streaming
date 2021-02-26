@@ -14,7 +14,7 @@ import traceback
 
 # ENV
 dynamodb_table = os.environ["DYNAMODB_TABLE"]
-input_security_groups = ["893667"]
+input_security_groups = [os.environ["INPUT_SECURITY_GROUP"]]
 medialive_role_arn = os.environ["MEDIALIVE_ROLE_ARN"]
 archive_bucket = os.environ["ARCHIVE_BUCKET"]
 cloudfront_distribution_id = os.environ["CLOUDFRONT_DISTRIBUTION_ID"]
