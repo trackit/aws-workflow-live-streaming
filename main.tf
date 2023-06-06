@@ -19,7 +19,6 @@ terraform {
 data "aws_caller_identity" "current" {}
 
 resource "aws_dynamodb_table" "medialive-api-storage" {
-  count                = var.input_security_group != "" ? 1 : 0
   name           = var.dynamodb_table_name
   hash_key       = "id"
   read_capacity  = 5
@@ -33,7 +32,6 @@ resource "aws_dynamodb_table" "medialive-api-storage" {
 
 
 resource "aws_api_gateway_rest_api" "api" {
-  count                = var.input_security_group != "" ? 1 : 0
   name = "${var.project_base_name}-medialive-api"
 }
 

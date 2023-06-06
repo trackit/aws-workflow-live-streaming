@@ -4,42 +4,36 @@
 # aws_api_gateway_resource
 
 resource "aws_api_gateway_resource" "api_resource_streams" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_rest_api.api.root_resource_id
   path_part   = "streams"
 }
 
 resource "aws_api_gateway_resource" "api_resource_id" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.api_resource_streams.id
   path_part   = "{id}"
 }
 
 resource "aws_api_gateway_resource" "api_resource_start" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.api_resource_id.id
   path_part   = "start"
 }
 
 resource "aws_api_gateway_resource" "api_resource_stop" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.api_resource_id.id
   path_part   = "stop"
 }
 
 resource "aws_api_gateway_resource" "api_resource_split" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.api_resource_id.id
   path_part   = "split"
 }
 
 resource "aws_api_gateway_resource" "api_resource_live" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.api_resource_id.id
   path_part   = "live"
@@ -48,7 +42,6 @@ resource "aws_api_gateway_resource" "api_resource_live" {
 # aws_api_gateway_method
 
 resource "aws_api_gateway_method" "api_method_post_streams" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.api_resource_streams.id
   http_method   = "POST"
@@ -56,7 +49,6 @@ resource "aws_api_gateway_method" "api_method_post_streams" {
 }
 
 resource "aws_api_gateway_method" "api_method_get_streams" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.api_resource_streams.id
   http_method   = "GET"
@@ -64,7 +56,6 @@ resource "aws_api_gateway_method" "api_method_get_streams" {
 }
 
 resource "aws_api_gateway_method" "api_method_post_streams_start" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.api_resource_start.id
   http_method   = "POST"
@@ -72,7 +63,6 @@ resource "aws_api_gateway_method" "api_method_post_streams_start" {
 }
 
 resource "aws_api_gateway_method" "api_method_post_streams_stop" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.api_resource_stop.id
   http_method   = "POST"
@@ -80,7 +70,6 @@ resource "aws_api_gateway_method" "api_method_post_streams_stop" {
 }
 
 resource "aws_api_gateway_method" "api_method_post_stream_split" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.api_resource_split.id
   http_method   = "POST"
@@ -88,7 +77,6 @@ resource "aws_api_gateway_method" "api_method_post_stream_split" {
 }
 
 resource "aws_api_gateway_method" "api_method_post_stream_live" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.api_resource_live.id
   http_method   = "POST"
@@ -96,7 +84,6 @@ resource "aws_api_gateway_method" "api_method_post_stream_live" {
 }
 
 resource "aws_api_gateway_method" "api_method_delete_stream_live" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.api_resource_live.id
   http_method   = "DELETE"
@@ -104,7 +91,6 @@ resource "aws_api_gateway_method" "api_method_delete_stream_live" {
 }
 
 resource "aws_api_gateway_method" "api_method_get_streams_id" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.api_resource_id.id
   http_method   = "GET"
@@ -112,7 +98,6 @@ resource "aws_api_gateway_method" "api_method_get_streams_id" {
 }
 
 resource "aws_api_gateway_method" "api_method_post_streams_id" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.api_resource_id.id
   http_method   = "POST"
@@ -120,7 +105,6 @@ resource "aws_api_gateway_method" "api_method_post_streams_id" {
 }
 
 resource "aws_api_gateway_method" "api_method_delete_streams_id" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.api_resource_id.id
   http_method   = "DELETE"
@@ -130,7 +114,6 @@ resource "aws_api_gateway_method" "api_method_delete_streams_id" {
 # aws_api_gateway_integration
 
 resource "aws_api_gateway_integration" "api_integration_post_streams" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.api_resource_streams.id
   http_method             = aws_api_gateway_method.api_method_post_streams.http_method
@@ -141,7 +124,6 @@ resource "aws_api_gateway_integration" "api_integration_post_streams" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_get_streams" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.api_resource_streams.id
   http_method             = aws_api_gateway_method.api_method_get_streams.http_method
@@ -152,7 +134,6 @@ resource "aws_api_gateway_integration" "api_integration_get_streams" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_post_streams_start" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.api_resource_start.id
   http_method             = aws_api_gateway_method.api_method_post_streams_start.http_method
@@ -163,7 +144,6 @@ resource "aws_api_gateway_integration" "api_integration_post_streams_start" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_post_streams_stop" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.api_resource_stop.id
   http_method             = aws_api_gateway_method.api_method_post_streams_stop.http_method
@@ -174,7 +154,6 @@ resource "aws_api_gateway_integration" "api_integration_post_streams_stop" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_post_stream_split" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.api_resource_split.id
   http_method             = aws_api_gateway_method.api_method_post_stream_split.http_method
@@ -185,7 +164,6 @@ resource "aws_api_gateway_integration" "api_integration_post_stream_split" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_post_stream_live" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.api_resource_live.id
   http_method             = aws_api_gateway_method.api_method_post_stream_live.http_method
@@ -196,7 +174,6 @@ resource "aws_api_gateway_integration" "api_integration_post_stream_live" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_delete_stream_live" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.api_resource_live.id
   http_method             = aws_api_gateway_method.api_method_delete_stream_live.http_method
@@ -207,7 +184,6 @@ resource "aws_api_gateway_integration" "api_integration_delete_stream_live" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_get_stream_id" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.api_resource_id.id
   http_method             = aws_api_gateway_method.api_method_get_streams_id.http_method
@@ -218,7 +194,6 @@ resource "aws_api_gateway_integration" "api_integration_get_stream_id" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_post_stream_id" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.api_resource_id.id
   http_method             = aws_api_gateway_method.api_method_post_streams_id.http_method
@@ -229,7 +204,6 @@ resource "aws_api_gateway_integration" "api_integration_post_stream_id" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_delete_stream_id" {
-  count                = var.input_security_group != "" ? 1 : 0
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.api_resource_id.id
   http_method             = aws_api_gateway_method.api_method_delete_streams_id.http_method

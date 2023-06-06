@@ -345,7 +345,6 @@ resource "aws_lambda_function" "medialive_delete_stream_cloudfront" {
 }
 
 resource "aws_lambda_permission" "invoke_permission_delete_stream_cloudfront" {
-  count                = var.input_security_group != "" ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_delete_stream_cloudfront.function_name
   principal     = "apigateway.amazonaws.com"
