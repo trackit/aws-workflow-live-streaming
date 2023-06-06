@@ -1,4 +1,5 @@
 resource "aws_lambda_function" "medialive_create_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   filename         = var.lambda_zip_path
   function_name    = "${var.project_base_name}-medialive_api_create_stream"
   role             = aws_iam_role.lambda_job.arn
@@ -23,6 +24,7 @@ resource "aws_lambda_function" "medialive_create_stream" {
 }
 
 resource "aws_lambda_permission" "invoke_permission_create_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_create_stream.function_name
   principal     = "apigateway.amazonaws.com"
@@ -30,6 +32,7 @@ resource "aws_lambda_permission" "invoke_permission_create_stream" {
 }
 
 resource "aws_lambda_function" "medialive_start_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   filename         = var.lambda_zip_path
   function_name    = "${var.project_base_name}-medialive_api_start_stream"
   role             = aws_iam_role.lambda_job.arn
@@ -54,6 +57,7 @@ resource "aws_lambda_function" "medialive_start_stream" {
 }
 
 resource "aws_lambda_permission" "invoke_permission_start_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_start_stream.function_name
   principal     = "apigateway.amazonaws.com"
@@ -61,6 +65,7 @@ resource "aws_lambda_permission" "invoke_permission_start_stream" {
 }
 
 resource "aws_lambda_function" "medialive_stop_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   filename         = var.lambda_zip_path
   function_name    = "${var.project_base_name}-medialive_api_stop_stream"
   role             = aws_iam_role.lambda_job.arn
@@ -85,6 +90,7 @@ resource "aws_lambda_function" "medialive_stop_stream" {
 }
 
 resource "aws_lambda_permission" "invoke_permission_stop_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_stop_stream.function_name
   principal     = "apigateway.amazonaws.com"
@@ -92,6 +98,7 @@ resource "aws_lambda_permission" "invoke_permission_stop_stream" {
 }
 
 resource "aws_lambda_function" "medialive_get_streams" {
+  count                = var.input_security_group != "" ? 1 : 0
   filename         = var.lambda_zip_path
   function_name    = "${var.project_base_name}-medialive_api_get_streams"
   role             = aws_iam_role.lambda_job.arn
@@ -116,6 +123,7 @@ resource "aws_lambda_function" "medialive_get_streams" {
 }
 
 resource "aws_lambda_permission" "invoke_permission_get_streams" {
+  count                = var.input_security_group != "" ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_get_streams.function_name
   principal     = "apigateway.amazonaws.com"
@@ -123,6 +131,7 @@ resource "aws_lambda_permission" "invoke_permission_get_streams" {
 }
 
 resource "aws_lambda_function" "medialive_get_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   filename         = var.lambda_zip_path
   function_name    = "${var.project_base_name}-medialive_api_get_stream"
   role             = aws_iam_role.lambda_job.arn
@@ -147,6 +156,7 @@ resource "aws_lambda_function" "medialive_get_stream" {
 }
 
 resource "aws_lambda_permission" "invoke_permission_get_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_get_stream.function_name
   principal     = "apigateway.amazonaws.com"
@@ -154,6 +164,7 @@ resource "aws_lambda_permission" "invoke_permission_get_stream" {
 }
 
 resource "aws_lambda_function" "medialive_update_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   filename         = var.lambda_zip_path
   function_name    = "${var.project_base_name}-medialive_api_update_stream"
   role             = aws_iam_role.lambda_job.arn
@@ -178,6 +189,7 @@ resource "aws_lambda_function" "medialive_update_stream" {
 }
 
 resource "aws_lambda_permission" "invoke_permission_update_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_update_stream.function_name
   principal     = "apigateway.amazonaws.com"
@@ -185,6 +197,7 @@ resource "aws_lambda_permission" "invoke_permission_update_stream" {
 }
 
 resource "aws_lambda_function" "medialive_delete_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   filename         = var.lambda_zip_path
   function_name    = "${var.project_base_name}-medialive_api_delete_stream"
   role             = aws_iam_role.lambda_job.arn
@@ -209,6 +222,7 @@ resource "aws_lambda_function" "medialive_delete_stream" {
 }
 
 resource "aws_lambda_permission" "invoke_permission_delete_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_delete_stream.function_name
   principal     = "apigateway.amazonaws.com"
@@ -216,6 +230,7 @@ resource "aws_lambda_permission" "invoke_permission_delete_stream" {
 }
 
 resource "aws_lambda_function" "medialive_split_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   filename         = var.lambda_zip_path
   function_name    = "${var.project_base_name}-medialive_api_split_stream"
   role             = aws_iam_role.lambda_job.arn
@@ -240,6 +255,7 @@ resource "aws_lambda_function" "medialive_split_stream" {
 }
 
 resource "aws_lambda_permission" "invoke_permission_split_stream" {
+  count                = var.input_security_group != "" ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_split_stream.function_name
   principal     = "apigateway.amazonaws.com"
@@ -247,6 +263,7 @@ resource "aws_lambda_permission" "invoke_permission_split_stream" {
 }
 
 resource "aws_lambda_function" "medialive_delete_callback" {
+  count                = var.input_security_group != "" ? 1 : 0
   filename         = var.lambda_zip_path
   function_name    = "${var.project_base_name}-medialive_api_delete_stream_callback"
   role             = aws_iam_role.lambda_job.arn
@@ -270,6 +287,7 @@ resource "aws_lambda_function" "medialive_delete_callback" {
 }
 
 resource "aws_lambda_function" "medialive_set_stream_cloudfront" {
+  count                = var.input_security_group != "" ? 1 : 0
   filename         = var.lambda_zip_path
   function_name    = "${var.project_base_name}-medialive_api_set_stream_cloudfront"
   role             = aws_iam_role.lambda_job.arn
@@ -294,6 +312,7 @@ resource "aws_lambda_function" "medialive_set_stream_cloudfront" {
 }
 
 resource "aws_lambda_permission" "invoke_permission_set_stream_cloudfront" {
+  count                = var.input_security_group != "" ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_set_stream_cloudfront.function_name
   principal     = "apigateway.amazonaws.com"
@@ -301,6 +320,7 @@ resource "aws_lambda_permission" "invoke_permission_set_stream_cloudfront" {
 }
 
 resource "aws_lambda_function" "medialive_delete_stream_cloudfront" {
+  count                = var.input_security_group != "" ? 1 : 0
   filename         = var.lambda_zip_path
   function_name    = "${var.project_base_name}-medialive_api_delete_stream_cloudfront"
   role             = aws_iam_role.lambda_job.arn
@@ -325,6 +345,7 @@ resource "aws_lambda_function" "medialive_delete_stream_cloudfront" {
 }
 
 resource "aws_lambda_permission" "invoke_permission_delete_stream_cloudfront" {
+  count                = var.input_security_group != "" ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.medialive_delete_stream_cloudfront.function_name
   principal     = "apigateway.amazonaws.com"
