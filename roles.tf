@@ -44,13 +44,11 @@ data "aws_iam_policy_document" "lambda_job_trust" {
 }
 
 resource "aws_iam_role" "lambda_job" {
-  count                = var.input_security_group != "" ? 1 : 0
   name               = "${var.project_base_name}medialive-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.lambda_job_trust.json
 }
 
 resource "aws_iam_role_policy" "lambda_job" {
-  count                = var.input_security_group != "" ? 1 : 0
   name = "${var.project_base_name}medialive-lambda-policy"
   role = aws_iam_role.lambda_job.id
 
@@ -58,7 +56,6 @@ resource "aws_iam_role_policy" "lambda_job" {
 }
 
 resource "aws_iam_role_policy_attachment" "basic_execution" {
-  count                = var.input_security_group != "" ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
   role       = aws_iam_role.lambda_job.name
 }
@@ -78,13 +75,11 @@ data "aws_iam_policy_document" "medialive_job_trust" {
 }
 
 resource "aws_iam_role" "medialive_job" {
-  count                = var.input_security_group != "" ? 1 : 0
   name               = "${var.project_base_name}medialive-api-role"
   assume_role_policy = data.aws_iam_policy_document.medialive_job_trust.json
 }
 
 resource "aws_iam_role_policy_attachment" "admin" {
-  count                = var.input_security_group != "" ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
   role       = aws_iam_role.medialive_job.name
 }
