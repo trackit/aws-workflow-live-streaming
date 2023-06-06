@@ -2,10 +2,10 @@ terraform {
   required_version = ">= 0.12.0"
 }
 
-provider "aws" {
-  version = ">= 2.11"
-  region  = var.region
-}
+# provider "aws" {
+#   version = ">= 2.11"
+#   region  = var.region
+# }
 
 # Save the terraform state for medialive module in a S3 bucket
 # terraform {
